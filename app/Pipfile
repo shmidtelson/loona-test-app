@@ -8,6 +8,11 @@ aiohttp = "*"
 aiohttp-swagger = "*"
 aiohttp-jwt = "*"
 pyjwt = "*"
+sqlalchemy = "*"
+alembic = "*"
+bcrypt = "*"
+python-dotenv = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
 

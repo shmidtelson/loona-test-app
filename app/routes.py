@@ -1,5 +1,5 @@
 from settings import API_PREFIX
-from views import UserView, UserAuthView, UserRegisterView
+from src.views import UserView, UserAuthView, UserRegisterView
 
 routes = [
     ['user', UserView, 'user'],

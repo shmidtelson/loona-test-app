@@ -2,6 +2,9 @@ from aiohttp import web
 from routes import setup_routes
 from aiohttp_swagger import *
 from settings import SWAGGER_PARAMS, APP_PORT
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = web.Application()
 setup_routes(app)
