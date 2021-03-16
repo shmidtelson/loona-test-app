@@ -1,0 +1,28 @@
+version: "3.9"
+services:
+  postgres:
+    container_name: test_postgres
+    image: postgres:latest
+    env_file:
+      - ./app/.env
+    environment:
+      PGDATA: /data/postgres
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - 5432:5432
+    restart: unless-stopped
+
+  api:
+    container_name: test_api
+    build:
+      context: ./app
+    ports:
+      - 80:8081
+    volumes:
+      - ./app:/home/app
+    depends_on:
+      - postgres
+
+volumes:
+    postgres:

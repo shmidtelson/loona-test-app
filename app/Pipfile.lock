@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "6a5e34f058c5836778e75d7844d44279dda4f1146d3a28b8ea35f170c7fa583e"
+            "sha256": "fa347d5bcfabd80dbdfdc7922a65ae09276b541b692ff17255aab56afee3063f"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -58,6 +58,14 @@
             ],
             "index": "pypi",
             "version": "==3.7.4.post0"
+        },
+        "aiohttp-jwt": {
+            "hashes": [
+                "sha256:6bfa0eeafa76bc164b8cc6961f2541226d977f59c5de58eaf5a191f899ee381e",
+                "sha256:e666d1b0ab02ced7cb8edc693b0da2850445e6a917d9b94943a80164e04f2689"
+            ],
+            "index": "pypi",
+            "version": "==0.6.1"
         },
         "aiohttp-swagger": {
             "hashes": [
@@ -206,6 +214,14 @@
             ],
             "markers": "python_version >= '3.6'",
             "version": "==5.1.0"
+        },
+        "pyjwt": {
+            "hashes": [
+                "sha256:a5c70a06e1f33d81ef25eecd50d50bd30e34de1ca8b2b9fa3fe0daaabcf69bf7",
+                "sha256:b70b15f89dc69b993d8a8d32c299032d5355c82f9b5b7e851d1a6d706dffe847"
+            ],
+            "index": "pypi",
+            "version": "==2.0.1"
         },
         "pyyaml": {
             "hashes": [
