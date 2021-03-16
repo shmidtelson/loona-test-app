@@ -1,7 +1,7 @@
 from abc import ABC
 
-from src.service import DBSession
-from src.service.singleton import DBConnection
+from src.service.DBSession import DBSession
+from src.service.singleton.DBConnection import DBConnection
 
 
 class DBAbstract(ABC):

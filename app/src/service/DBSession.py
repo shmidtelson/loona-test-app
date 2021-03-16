@@ -4,7 +4,7 @@ from sqlalchemy.exc import IntegrityError, DataError
 from sqlalchemy.orm import sessionmaker, scoped_session
 
 from src.models import BaseModel, Base
-from src.service.abstract import LoggerAbstract
+from src.service.abstract.LoggerAbstract import LoggerAbstract
 
 
 class DBSession(LoggerAbstract):

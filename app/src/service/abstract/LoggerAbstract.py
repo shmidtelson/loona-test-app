@@ -1,6 +1,6 @@
 from abc import ABC
 
-from src.service.singleton import Logger
+from src.service.singleton.Logger import Logger
 
 
 class LoggerAbstract(ABC):

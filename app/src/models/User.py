@@ -1,6 +1,6 @@
 from sqlalchemy import Column, String
 
-from src.models import BaseModel
+from src.models.Base.BaseModel import BaseModel
 from src.utils import Security
 
 

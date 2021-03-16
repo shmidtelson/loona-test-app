@@ -1,4 +1,8 @@
-from __future__ import with_statement
+from logging.config import fileConfig
+
+from sqlalchemy import engine_from_config
+from sqlalchemy import pool
+
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 from logging.config import fileConfig
@@ -23,6 +27,7 @@ fileConfig(config.config_file_name)
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 from src.models.Base.BaseModel import Base
+
 target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
@@ -80,7 +85,8 @@ def run_migrations_online():
             context.run_migrations()
 
 
-HOST = os.getenv('POSTGRES_HOST')
+# HOST = os.getenv('POSTGRES_HOST')
+HOST = 'localhost'
 DB_TABLE = os.getenv('POSTGRES_DB')
 USER = os.getenv('POSTGRES_USER')
 PASSWORD = os.getenv('POSTGRES_PASSWORD')

@@ -1,4 +1,4 @@
-from src.service import DBSession
+from src.service.DBSession import DBSession
 
 
 class DBConnection:
