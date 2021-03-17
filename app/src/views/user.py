@@ -1,6 +1,7 @@
 from aiohttp import web
 
 from src.dto.response import ErrorResponse, SuccessResponse
+from src.repository.UserRepository import UserRepository
 from src.service.abstract.LoggerAbstract import LoggerAbstract
 from src.service.creator import UserCreator
 from src.service.singleton.Logger import Logger
@@ -39,7 +40,14 @@ class UserAuthView(web.View):
            "409":
                description: User already exists
         """
-        return web.json_response({"message": "good"})
+        params = await self.request.json()
+
+        user_repository = UserRepository()
+
+        user = user_repository.get_by_login(params.get('login'))
+        if not user:
+            return ErrorResponse('User not found')
+        return web.json_response(user.check_password(params.get('password')))
 
 
 class UserRegisterView(web.View):
@@ -57,11 +65,13 @@ class UserRegisterView(web.View):
             "409":
                description: User already exists
         """
-        creator = UserCreator()
+        params = await self.request.json()
+
         try:
+            creator = UserCreator()
             user = creator.create(
-                self.request.get('login'),
-                self.request.get('password')
+                params.get('login'),
+                params.get('password')
             )
         except Exception as e:
             Logger.instance().info(e, exc_info=True)

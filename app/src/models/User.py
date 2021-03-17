@@ -11,7 +11,7 @@ class UserModel(BaseModel):
     password = Column(String(128))
 
     def set_password(self, password):
-        self.password = Security.get_hashed_password(password)
+        self.password = Security.get_hashed_password(password).decode()
 
     def check_password(self, password):
-        return Security.check_password(self.password, password)
+        return Security.check_password(password, self.password)
