@@ -6,7 +6,13 @@ from aiohttp.web import middleware
 
 
 @middleware
-async def json_handler(request: web.Request, handler: Callable) -> web.Response:
-    request.json_fields = await request.json()
-    resp = await handler(request)
+async def json_response(request: web.Request, handler: Callable) -> web.Response:
+    # resp
+    resp = await handler(request)  # type: web.Response
+
+    if hasattr(resp, 'text'):
+        resp.text = json.dumps({
+            'data': json.loads(resp.text)
+        })
+
     return resp

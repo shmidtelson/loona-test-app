@@ -1,8 +1,7 @@
 from aiohttp import web
 
-from src.dto.response import ErrorResponse, SuccessResponse
 from src.repository.UserRepository import UserRepository
-from src.service.abstract.LoggerAbstract import LoggerAbstract
+from src.serializers.UserModelSerializer import UserModelSerializer
 from src.service.creator import UserCreator
 from src.service.singleton.Logger import Logger
 
@@ -46,12 +45,12 @@ class UserAuthView(web.View):
 
         user = user_repository.get_by_login(params.get('login'))
         if not user:
-            return ErrorResponse('User not found')
+            return web.json_response('User not found', status=404)
         return web.json_response(user.check_password(params.get('password')))
 
 
 class UserRegisterView(web.View):
-    async def post(self):
+    async def post(self) -> web.Response:
         """
         ---
         description: User register.
@@ -75,6 +74,6 @@ class UserRegisterView(web.View):
             )
         except Exception as e:
             Logger.instance().info(e, exc_info=True)
-            return ErrorResponse('Something went wrong')
+            return web.json_response(data='User already exists', status=409)
 
-        return SuccessResponse(user)
+        return web.json_response(UserModelSerializer(user).serialize())
