@@ -1,5 +1,6 @@
 from aiohttp import web
 
+from src.helpers.validator import validate
 from src.repository.UserRepository import UserRepository
 from src.serializers.UserModelSerializer import UserModelSerializer
 from src.service.creator import UserCreator
@@ -66,14 +67,22 @@ class UserRegisterView(web.View):
         """
         params = await self.request.json()
 
-        try:
-            creator = UserCreator()
-            user = creator.create(
-                params.get('login'),
-                params.get('password')
-            )
-        except Exception as e:
-            Logger.instance().info(e, exc_info=True)
-            return web.json_response(data='User already exists', status=409)
+        schema = {
+            "login": {
+                "required": True,
+                "type": "string"
+            },
+            "password": {
+                "required": True,
+                "type": "string"
+            },
+        }
+        await validate(params, schema)
+
+        creator = UserCreator(self.request.app['db'])
+        user = await creator.create(
+            params.get('login'),
+            params.get('password')
+        )
 
         return web.json_response(UserModelSerializer(user).serialize())

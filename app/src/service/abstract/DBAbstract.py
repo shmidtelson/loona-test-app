@@ -1,13 +1,11 @@
 from abc import ABC
 
-from src.service.DBSession import DBSession
-from src.service.singleton.DBConnection import DBConnection
+from sqlalchemy.ext.asyncio import AsyncSession
 
 
 class DBAbstract(ABC):
-    db: DBSession
+    db: AsyncSession = None
 
-    def __init__(self):
-        self.db = DBConnection.db()
-
+    def __init__(self, db: AsyncSession):
         super(DBAbstract, self).__init__()
+        self.db = db
