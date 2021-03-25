@@ -1,1 +1,1 @@
-from .user import UserView, UserAuthView, UserRegisterView
+from .user import UserView, UserAuthView, UserRegisterView, UserMeView

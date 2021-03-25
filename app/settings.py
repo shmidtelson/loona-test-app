@@ -8,3 +8,6 @@ SWAGGER_PARAMS = {
     'api_version': '1.0',
     'contact': 'https://t.me/romua1d',
 }
+
+JWT_SECRET = 'wF!gE!Dc(]E$v6EeGF$4@[>MmUTG'
+JWT_ALGORITHMS = 'HS256'
