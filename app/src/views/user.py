@@ -6,7 +6,7 @@ from src.helpers.validator import validate
 from src.repository.UserRepository import UserRepository
 from src.serializers.UserModelSerializer import UserModelSerializer
 from src.service.creator import UserCreator
-from src.service.singleton.Logger import Logger
+from src.views.base import BaseView
 
 
 class UserView(web.View):
@@ -27,7 +27,7 @@ class UserView(web.View):
         return web.json_response({"message": "good"})
 
 
-class UserAuthView(web.View):
+class UserAuthView(web.View, BaseView):
     async def post(self):
         """
         ---
@@ -58,7 +58,7 @@ class UserAuthView(web.View):
         }
         await validate(params, schema)
 
-        user_repository = UserRepository(self.request.app['db'])
+        user_repository = UserRepository(self.db)
         user = await user_repository.get_by_login(params.get('login'))
         if not user:
             raise web.HTTPNotFound(reason='User not found')
@@ -69,6 +69,7 @@ class UserAuthView(web.View):
             raise web.HTTPBadRequest(reason='Wrong password')
 
         delattr(user, 'password')
+
         encoded = jwt.encode({'user': {
             'id': str(user.id),
             'login': user.login,
@@ -79,7 +80,7 @@ class UserAuthView(web.View):
         })
 
 
-class UserRegisterView(web.View):
+class UserRegisterView(web.View, BaseView):
     async def post(self) -> web.Response:
         """
         ---
@@ -108,7 +109,7 @@ class UserRegisterView(web.View):
         }
         await validate(params, schema)
 
-        creator = UserCreator(self.request.app['db'])
+        creator = UserCreator(self.db)
         user = await creator.create(
             params.get('login'),
             params.get('password')
@@ -117,7 +118,7 @@ class UserRegisterView(web.View):
         return web.json_response(UserModelSerializer(user).serialize())
 
 
-class UserMeView(web.View):
+class UserMeView(web.View, BaseView):
     async def get(self) -> web.Response:
         """
         ---
@@ -132,37 +133,11 @@ class UserMeView(web.View):
             "404":
                description: User not found
         """
-        # params = await self.request.json()
-        # schema = {'token': {'required': True, "type": 'string'}}
-        # await validate(params, schema)
+        repository = UserRepository(self.db)
 
-        # schema = {
-        #     "login": {
-        #         "required": True,
-        #         "type": "string"
-        #     },
-        #     "password": {
-        #         "required": True,
-        #         "type": "string"
-        #     },
-        # }
-        # await validate(params, schema)
-        #
-        # creator = UserCreator(self.request.app['db'])
-        # user = await creator.create(
-        #     params.get('login'),
-        #     params.get('password')
-        # )
-        if not self.request.get('payload'):
-            raise web.HTTPBadRequest(reason='Wrong request')
-
-        user_payload = self.request['payload']['user']
-
-        repository = UserRepository(self.request.app['db'])
-        user = await repository.get_by_id(user_payload['id'])
+        user = await repository.get_by_id(self.user.get('id'))
 
         if not user:
             raise web.HTTPNotFound(reason='User not found')
 
         return web.json_response(UserModelSerializer(user[0]).serialize())
-
