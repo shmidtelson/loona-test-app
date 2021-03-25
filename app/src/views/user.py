@@ -153,7 +153,11 @@ class UserMeView(web.View):
         #     params.get('login'),
         #     params.get('password')
         # )
-        user_payload = self.request['payload'].get('user')
+        if not self.request.get('payload'):
+            raise web.HTTPBadRequest(reason='Wrong request')
+
+        user_payload = self.request['payload']['user']
+
         repository = UserRepository(self.request.app['db'])
         user = await repository.get_by_id(user_payload['id'])
 
